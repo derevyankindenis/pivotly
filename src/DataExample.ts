@@ -38,34 +38,13 @@ const data: RowValue[] = [
   { year: 2023, month: 3, day: 3, salary: 200, profit: 300 },
 ];
 
-export const example: Config<
-  RowValue,
-  'month' | 'day' | 'year',
-  'salary' | 'profit'
-> = {
+export const example: Config = {
   report: {
     datasource: data,
-    structure: {
-      rows: ['month'],
-      columns: ['year'],
-    },
-    fields: {
-      dimensions: {
-        month: {
-          label: 'Month',
-        },
-        year: {
-          label: 'Year',
-        },
-      },
-      measures: {
-        salary: {
-          label: 'Salary',
-        },
-        profit: {
-          label: 'Profit',
-        },
-      },
+    slice: {
+      rows: [{ uniqueName: "month" }, { uniqueName: "day" }],
+      columns: [{ uniqueName: "year" }],
+      measures: [{ uniqueName: "profit" }]
     },
   },
 };

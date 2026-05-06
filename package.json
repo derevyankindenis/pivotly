@@ -1,20 +1,27 @@
 {
-  "name": "tsdown-starter",
+  "name": "pivotly",
   "type": "module",
-  "version": "0.0.0",
-  "description": "A starter for creating a TypeScript package.",
-  "author": "Author Name <author.name@mail.com>",
+  "version": "0.0.1",
+  "description": "Modern pivot table component for web.",
+  "author": "Derevyankin Denis <derevyankindenis@mail.ru>",
   "license": "MIT",
-  "homepage": "https://github.com/author/library#readme",
+  "homepage": "https://github.com/derevyankindenis/pivotly#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/author/library.git"
+    "url": "git+https://github.com/derevyankindenis/pivotly.git"
   },
   "bugs": {
-    "url": "https://github.com/author/library/issues"
+    "url": "https://github.com/derevyankindenis/pivotly/issues"
+  },
+  "sideEffects": false,
+  "engines": {
+    "node": ">=24"
   },
   "exports": {
-    ".": "./dist/index.mjs",
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    },
     "./package.json": "./package.json"
   },
   "main": "./dist/index.mjs",

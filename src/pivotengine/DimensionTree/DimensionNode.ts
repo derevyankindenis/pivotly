@@ -1,12 +1,12 @@
-export type DimensionValue = string | number | boolean | null;
+import type { FieldValue } from "../types";
 
 export class DimensionNode {
-  readonly value: DimensionValue; // Country: Russia
+  readonly value: FieldValue; // Country: Russia
 
-  private readonly children: Map<DimensionValue, DimensionNode> = new Map(); // City: Moscow, City: Samara
+  private readonly children: Map<FieldValue, DimensionNode> = new Map(); // City: Moscow, City: Samara
   private readonly childrenArray: DimensionNode[] = [];
 
-  constructor(value: DimensionValue) {
+  constructor(value: FieldValue) {
     this.value = value;
   }
 
@@ -15,7 +15,7 @@ export class DimensionNode {
     this.childrenArray.push(node);
   }
 
-  getChildByValue(value: DimensionValue) {
+  getChildByValue(value: FieldValue) {
     return this.children.get(value);
   }
 
