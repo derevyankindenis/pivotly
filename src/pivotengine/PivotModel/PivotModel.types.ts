@@ -1,5 +1,3 @@
-import type { Report } from "./types";
-
 export type CellPosition = {
     row: number;
     col: number;
@@ -16,6 +14,12 @@ export type Size = {
 export type CellValue = {
     type: "value";
     value: string;
+    x: number;
+    y: number;
+    colspan: number;
+    rowspan: number;
+    parentIndex: number;
+    childIndex: number;
 }
 
 /** 
@@ -67,6 +71,8 @@ export interface PivotModel {
 
     /** Returns cells in the rectangle bounded by `topLeft` and `bottomRight` */
     getCells(topLeft: CellPosition, bottomRight: CellPosition): Cell[][];
+
+    getAllCells(): Cell[][];
 
     // For streaming api
     // getCellsStream(topLeft, bottomRight, signal?): AsyncIterable<CellBatch>
