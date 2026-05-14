@@ -1,55 +1,61 @@
 import type { FieldValue } from "../types";
 
 export class DimensionNode {
-  private readonly children: Map<FieldValue, DimensionNode> = new Map();
+  readonly _children: Map<FieldValue, DimensionNode> = new Map();
+  private _leavesSize: number = 0;
 
-  constructor(readonly key: string, readonly value: FieldValue, readonly depth: number) { }
-
-  addChild(node: DimensionNode) {
-    this.children.set(node.value, node);
+  //TODO: return mutators (1. in return constructor 2. in callback 3. write to object from params)
+  // create outside weakmap with mutamotrs WeakMap<node, mutators>
+  constructor(readonly key: string, readonly value: FieldValue, readonly depth: number, readonly parent: DimensionNode | null = null) {
   }
 
+// #region Mutators
+  addChild(node: DimensionNode) {
+    this._children.set(node.value, node);
+  }
+
+  incrementLeaves() {
+    this._leavesSize++
+  }
+// #endregion
+
+
   hasChild(value: FieldValue) {
-    return this.children.has(value);
+    return this._children.has(value);
   }
 
   getChildByValue(value: FieldValue) {
-    return this.children.get(value);
+    return this._children.get(value);
   }
 
-  getChildrenSize() {
-    return this.children.size
+  get isLeaf() {
+    return this.childrenSize === 0;
   }
 
-  isLeaf() {
-    return this.getChildrenSize() === 0;
+  get leavesSize() {
+    return this.isLeaf ? 1 : this._leavesSize;
   }
 
-  getLeavesSize() {
-    if (this.children.size === 0) return 1;
-
-    let size = 0;
-    this.children.forEach(child => {
-      size += child.getLeavesSize();
-    })
-    return size;
+  get childrenSize() {
+    return this._children.size
   }
 
-  traverse(cb: TraverseCallback, parentIndex: number = 0, index: number = 0, shift: number = 0): number {
+  get children() {
+    return this._children.values()
+  }
+
+  traverse(cb: TraverseCallback, parentIndex: number = 0, index: number = 0, shift: number = 0) {
     let childIndex = 0;
     let leavesSize = 0;
 
-    this.children.forEach(child => {
-      const lastLeaves = child.traverse(cb, index, childIndex, shift + leavesSize);
-      leavesSize += lastLeaves;
+    this._children.forEach(child => {
+      child.traverse(cb, index, childIndex, shift + leavesSize);
+      leavesSize += child.leavesSize;
       childIndex++;
     })
 
-    const resultLeavesSize = this.isLeaf() ? 1 : leavesSize;
-    cb(this, parentIndex, index, shift, resultLeavesSize);
-
-    return resultLeavesSize;
+    cb(this, parentIndex, index, shift);
   }
 }
 
-type TraverseCallback = (node: DimensionNode, parentIndex: number, index: number, shift: number, leavesSize: number) => void;
+type TraverseCallback = (node: DimensionNode, parentIndex: number, index: number, shift: number) => void;
