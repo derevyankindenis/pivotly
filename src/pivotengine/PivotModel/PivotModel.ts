@@ -1,8 +1,9 @@
+import type { Cell } from "cli-table3";
 import { DimensionTree } from "../DimensionTree/DimensionTree";
 import { FactTable } from "../FactTable";
 import type { Config } from "../types";
 import type { Size } from "./PivotModel.types";
-import type { Cell as TableCell } from "cli-table3";
+
 
 export class PivotModel {
 
@@ -28,95 +29,42 @@ export class PivotModel {
     })
   }
 
-  getSize(): Size {
+  get rowLeavesSize() {
+    return this.rowsTree.leavesSize;
+  }
+
+  get colLeavesSize() {
+    return this.colsTree.leavesSize;
+  }
+
+  get rowHeaderSize() {
+    return this.rowsTree.depth;
+  }
+
+  get colHeaderSize() {
+    return this.colsTree.depth;
+  }
+
+  getFullSize(): Size {
     return {
-      width: this.rowsTree.depth + this.colsTree.leavesSize,
-      height: this.colsTree.depth + this.rowsTree.leavesSize,
+      width: this.rowHeaderSize + this.colLeavesSize,
+      height: this.colHeaderSize + this.rowLeavesSize
     };
   };
 
-  // TODO: Collect full table
-  getAllCells() {
-    const cells: TableCell[][] = [];
-
-    /** Add corner header */
-    const { columns, rows } = this.config.report.slice;
-
-    cells[0] = [];
-    rows.forEach(row => {
-      cells[0].push({
-        content: row.uniqueName,
-        rowSpan: columns.length,
-        hAlign: "center",
-        vAlign: "center"
-      })
-    })
-
-    /** Add column headers */
-    for (const node of this.colsTree.bfs()) {
-      const { value, leavesSize, depth } = node;
-      const rowNum = depth - 1;
-
-      if (!cells[rowNum]) {
-        cells[rowNum] = [];
-      }
-
-      cells[rowNum].push({
-        content: value,
-        rowSpan: 1,
-        colSpan: leavesSize,
-        hAlign: "center",
-        vAlign: "center"
-      })
-    }
-
-    /** Add row headers */
-    const rowShift = this.colsTree.depth - 1;
-    for (const node of this.rowsTree.dfs()) {
-      const { childIndex, node: { value, leavesSize } } = node;
-      const rowNum = rowShift + childIndex + 1;
-      if (!cells[rowNum]) {
-        cells[rowNum] = [];
-      }
-      cells[rowNum].push({
-        content: value,
-        rowSpan: leavesSize,
-        colSpan: 1,
-        hAlign: "center",
-        vAlign: "center"
-      })
-    }
-
-
-    /** Add row headers 
-    let lastDepth = 1;
-    let rowNum = this.colsTree.depth - 1;
-    for (const node of this.rowsTree.bfs()) {
-      const { value, leavesSize, depth } = node;
-      if(depth !== lastDepth) {
-        lastDepth = depth;
-        rowNum = this.colsTree.depth;
-      } else {
-        rowNum++;
-      }
-
-      if (!cells[rowNum]) {
-        cells[rowNum] = [];
-      }
-
-      cells[rowNum].push({
-        content: value,
-        rowSpan: leavesSize,
-        colSpan: 1,
-        hAlign: "center",
-        vAlign: "center"
-      })
-    }
-*/
-
-    return cells;
+  getAllCellsSparse(): Cell[][] {
+    //TODO: implement sparse mode
+    return [];
   }
 
+  getAllCellsDense(): Cell[][] {
+    //TODO: implement dense mode
+    return [];
+  }
 
+  getTanstakedCells(): Cell[][] {
+    //TODO: implement transstaked mode
+    return [];
+  }
 
 }

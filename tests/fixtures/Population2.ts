@@ -6,12 +6,12 @@ const data = [
   { "country": "Russia", "city": "Moscow", "year": 2018, "month": "January", "population": 12620000 },
   { "country": "Russia", "city": "Moscow", "year": 2018, "month": "July", "population": 12655000 },
 
-  { "country": "Russia", "city": "Saint Petersburg", "year": 2016, "month": "January", "population": 5260000 },
-  { "country": "Russia", "city": "Saint Petersburg", "year": 2016, "month": "July", "population": 5280000 },
-  { "country": "Russia", "city": "Saint Petersburg", "year": 2017, "month": "January", "population": 5320000 },
-  { "country": "Russia", "city": "Saint Petersburg", "year": 2017, "month": "July", "population": 5350000 },
-  { "country": "Russia", "city": "Saint Petersburg", "year": 2018, "month": "January", "population": 5360000 },
-  { "country": "Russia", "city": "Saint Petersburg", "year": 2018, "month": "July", "population": 5380000 },
+  { "country": "Russia", "city": "Samara", "year": 2016, "month": "January", "population": 5260000 },
+  { "country": "Russia", "city": "Samara", "year": 2016, "month": "July", "population": 5280000 },
+  { "country": "Russia", "city": "Samara", "year": 2017, "month": "January", "population": 5320000 },
+  { "country": "Russia", "city": "Samara", "year": 2017, "month": "July", "population": 5350000 },
+  { "country": "Russia", "city": "Samara", "year": 2018, "month": "January", "population": 5360000 },
+  { "country": "Russia", "city": "Samara", "year": 2018, "month": "July", "population": 5380000 },
 
   { "country": "Russia", "city": "Novosibirsk", "year": 2016, "month": "January", "population": 1570000 },
   { "country": "Russia", "city": "Novosibirsk", "year": 2016, "month": "July", "population": 1580000 },
@@ -74,16 +74,14 @@ export const config = {
   },
 };
 
-
-/**
-
+export const result = `
 ┌─────────┬───────────────────┬─────────────────────────┬─────────────────────────┬─────────────────────────┐
 │         │                   │          2016           │          2017           │          2018           │
 │ Country │      City         ├────────────┬────────────┼────────────┬────────────┼────────────┬────────────┤
 │         │                   │  January   │    July    │  January   │    July    │  January   │    July    │
 ├─────────┼───────────────────┼────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤
 │ Russia  │ Moscow            │ 12 300 000 │ 12 330 000 │ 12 470 000 │ 12 500 000 │ 12 620 000 │ 12 655 000 │
-│         │ Saint Petersburg  │  5 260 000 │  5 280 000 │  5 320 000 │  5 350 000 │  5 360 000 │  5 380 000 │
+│         │ Samara            │  5 260 000 │  5 280 000 │  5 320 000 │  5 350 000 │  5 360 000 │  5 380 000 │
 │         │ Novosibirsk       │  1 570 000 │  1 580 000 │  1 590 000 │  1 600 000 │  1 610 000 │  1 620 000 │
 ├─────────┼───────────────────┼────────────┼────────────┼────────────┼────────────┼────────────┼────────────┤
 │ USA     │ New York          │  8 510 000 │  8 540 000 │  8 590 000 │  8 620 000 │  8 410 000 │  8 390 000 │
@@ -94,5 +92,4 @@ export const config = {
 │         │ Hamburg           │  1 800 000 │  1 810 000 │  1 820 000 │  1 830 000 │  1 835 000 │  1 840 000 │
 │         │ Munich            │  1 445 000 │  1 450 000 │  1 455 000 │  1 460 000 │  1 465 000 │  1 470 000 │
 └─────────┴───────────────────┴────────────┴────────────┴────────────┴────────────┴────────────┴────────────┘
- 
- */
+`;
