@@ -71,10 +71,22 @@ export class PivotModel {
     }
 
     /** Add row headers */
-    let rowNum = this.colsTree.depth - 1;
-    for(const node of this.rowsTree.dfs()) {
-      
+    const rowShift = this.colsTree.depth - 1;
+    for (const node of this.rowsTree.dfs()) {
+      const { childIndex, node: { value, leavesSize } } = node;
+      const rowNum = rowShift + childIndex + 1;
+      if (!cells[rowNum]) {
+        cells[rowNum] = [];
+      }
+      cells[rowNum].push({
+        content: value,
+        rowSpan: leavesSize,
+        colSpan: 1,
+        hAlign: "center",
+        vAlign: "center"
+      })
     }
+
 
     /** Add row headers 
     let lastDepth = 1;

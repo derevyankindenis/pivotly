@@ -50,7 +50,7 @@ describe('Population 2', () => {
 
   test("table test", () => {
     const table = new Table({ style: { head: [], border: [] } });
-    // const cells = model.getAllCells();
+    const cells = model.getAllCells();
     // cells[2] = [
     //   {
     //     content: "Russia",
@@ -63,9 +63,9 @@ describe('Population 2', () => {
     // cells[3] = [{
     //   content: "Samara",
     // },];
-    // table.push(...cells);
+    table.push(...cells);
 
-    // console.log(table.toString());
+    console.log(table.toString());
 
     expect(true).toBe(true);
 
