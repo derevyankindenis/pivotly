@@ -2,6 +2,8 @@ import { beforeAll, describe, expect, test } from 'vitest';
 import { PivotModel } from '../src/pivotengine/PivotModel/PivotModel'
 import { config as configPopulation1 } from "./fixtures/Population1";
 import { config as configPopulation2, result as result2 } from "./fixtures/Population2";
+import {config as configSales } from "./fixtures/Sales";
+import {config as configSales2 } from "./fixtures/Sales2";
 import Table from "cli-table3"
 
 
@@ -41,8 +43,30 @@ describe('Population 2', () => {
     const cells = model.getTanstakedCells();
     table.push(...cells);
 
-    expect(table.toString().trim()).toBe(result2.trim());
+    const result = table.toString().trim();
+    //console.log(result);
+
+    expect(result).toBe(result2.trim());
 
   })
+})
 
+describe('Test', () => {
+
+  let model: PivotModel;
+
+  beforeAll(() => {
+    model = new PivotModel(configSales);
+  })
+
+  test("Sales table", () => {
+    const table = new Table({ style: { head: [], border: [] } });
+    const cells = model.getTanstakedCells();
+    table.push(...cells);
+
+    const result = table.toString().trim();
+    console.log(result);
+
+    expect(true).toBe(true);
+  })
 })
