@@ -1,6 +1,8 @@
-# tsdown-starter
+# Pivotly
 
-A starter for creating a TypeScript package.
+Library to work with pivot tables.
+
+> ⚠️ **Warning:** Early development. Not ready for production.
 
 ## Development
 
