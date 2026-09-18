@@ -65,7 +65,7 @@ export class DimensionTree {
     while (head < queue.length) {
       const node = queue[head++];
       yield node;
-      queue.push(...node.children); // TODO: add inerator to stack, not elements
+      queue.push(...node.children); // TODO: add iterator (generator) to stack, not elements
     }
   }
 
@@ -73,12 +73,10 @@ export class DimensionTree {
     return this._dfs(this.root);
   }
 
-  private *_dfs(node: DimensionNode, childIndex: number = 0): Generator<VisitDfs> {
-    if (node !== this.root) yield { node, childIndex };
-    let indexChild = 0;
+  private *_dfs(node: DimensionNode): Generator<DimensionNode> {
+    if (node !== this.root) yield node; // TODO: remove check is root
     for (const childNode of node.children) {
-      yield* this._dfs(childNode, indexChild);
-      indexChild++
+      yield* this._dfs(childNode);
     }
   }
 
@@ -88,7 +86,7 @@ export class DimensionTree {
     let childNode = parentNode.getChildByValue(value)
     let leafCreated = false;
     if (!childNode) {
-      childNode = new DimensionNode(`${parentKey}/${value}`, value, fieldIndex + 1, parentNode);
+      childNode = new DimensionNode(this.shortId, value, fieldIndex + 1, parentNode);
       parentNode.addChild(childNode);
       leafCreated = true;
     }
@@ -101,4 +99,8 @@ export class DimensionTree {
       return { node, leafCreated }
     }
   }
+
+  private get shortId() {
+    return Math.random().toString(36).substring(2, 2 + 9);
+}
 }

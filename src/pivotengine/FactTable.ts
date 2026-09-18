@@ -15,7 +15,22 @@ export class FactTable {
         return this.cells.get(key);
     };
 
-    private makeKey(rowLeaf: DimensionNode, colLeaf: DimensionNode): string {
-        return `${rowLeaf.key}${this.SEPARATOR}${colLeaf.key}`;
+    getByKeys(rowLeafId: string, colLeafId: string): FieldValue | undefined {
+        const key = this.makeKeyByIds(rowLeafId, colLeafId);// `${rowLeafId}${this.SEPARATOR}${colLeafId}`;
+        console.log(key);
+        return this.cells.get(key);
     }
+
+    getByKey(key: string) {
+        return this.cells.get(key);
+    }
+
+    makeKey(rowLeaf: DimensionNode, colLeaf: DimensionNode): string {
+        return this.makeKeyByIds(rowLeaf.key, colLeaf.key);// `${rowLeaf.key}${this.SEPARATOR}${colLeaf.key}`;
+    }
+
+    makeKeyByIds(rowLeafId: string, colLeafId: string) {
+        return `${rowLeafId}${this.SEPARATOR}${colLeafId}`;
+    }
+
 }

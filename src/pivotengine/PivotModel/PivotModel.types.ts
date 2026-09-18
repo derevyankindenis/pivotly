@@ -1,6 +1,8 @@
+import type { FieldObject } from "../types";
+
 export type CellPosition = {
-    row: number;
-    col: number;
+    x: number;
+    y: number;
 }
 
 export type Size = {
@@ -10,73 +12,85 @@ export type Size = {
     height: number;
 }
 
-// TODO: separeate for rowHeader, colHeader, corner
-export type CellValue = {
-    type: "value";
-    value: string;
-    x: number;
-    y: number;
-    colspan: number;
-    rowspan: number;
-    parentIndex: number;
-    childIndex: number;
+export type CellType =
+  | "Corner"
+  | "RowHeader"
+  | "ColHeader"
+  | "Data"
+  | "Empty"
+  | "OutOfBounds";
+
+export type SimpleCell = {
+  /** Cell type */
+  type: CellType;
 }
 
-/** 
- * Legitimately empty cell inside the grid — e.g. when there is no data 
- * for a given row/column intersection.
- */
-export type CellEmpty = {
-    type: "empty";
+export type BaseCell = SimpleCell & {
+  /** Current position of the cell */
+  currentPosition: CellPosition;
+}
+
+/** Base cell type */
+export type BaseContentCell = BaseCell & {
+  /** Position of the top-left cell of a merged cell range (the anchor cell) */
+  anchorPosition: CellPosition;
+  /** Whether this cell is the anchor cell */
+  isAnchor: boolean;
+  /** Cell size */
+  size: Size;
+  /** Text displayed inside the cell */
+  content: string;
+  /**
+   * Unique cell identifier.
+   * All cells within a merged cell share the same identifier.
+   */
+  id: string;
+}
+
+/** The top-left corner cell of the table */
+export type CornerCell = BaseContentCell & {
+  type: "Corner";
+  /** Dimensions at whose intersection the cell is located */
+  crossDimensions: {
+    col: FieldObject,
+    row: FieldObject
+  }
+}
+
+export type RowHeaderCell = BaseContentCell & {
+  type: "RowHeader";
+}
+
+export type ColHeaderCell = BaseContentCell & {
+  type: "ColHeader";
+}
+
+/** Header cell */
+export type HeaderCell = BaseContentCell & {
+  type: "RowHeader" | "ColHeader";
 }
 
 /**
- * Cell requested outside the grid bounds. Returned by `getCells` when 
- * the requested rectangle extends beyond the table edges (e.g. virtualization buffer).
+ * Data cell containing a number (more precisely, a formatted string).
+ * A data cell is the intersection of a column dimension and a row dimension.
  */
-export type OutOfBoundsCell = {
-    type: 'outOfBounds';
+export type DataCell = BaseContentCell & {
+  type: "Data";
 }
 
-// MVP: simple cell. Will be extended to discriminated union 
-// (data / rowHeader / colHeader / corner) in v2.
-export type Cell = CellValue | OutOfBoundsCell;
-
-
-/** Pivot table model for rendering view */
-export interface PivotModel {
-    /** Returns the full size of the table including header zones. */
-    getSize(): Size;
-
-    /**
-    * Returns the size of the headers zone.
-    * - `width` — number of columns occupied by row headers (depth of row dimension tree)
-    * - `height` — number of rows occupied by column headers (depth of column dimension tree)
-    */
-    //TODO: separate for rowsHeaderSize and colsHeaderSize ?
-    //getHeadersSize(): Size;
-
-
-  /**
-   * Returns the cell at the given grid position.
-   * Position is treated as absolute coordinates within the full grid,
-   * including header zones — `(0, 0)` is the top-left corner of the table.
-   * 
-   * Behavior:
-   * - Position is within `getSize()` bounds and has data → returns `ValueCell`
-   * - Position is within bounds but has no data → returns `EmptyCell`
-   * - Position is outside bounds → returns `OutOfBoundsCell`
-   */
-    getCell(position: CellPosition): Cell;
-
-    /** Returns cells in the rectangle bounded by `topLeft` and `bottomRight` */
-    getCells(topLeft: CellPosition, bottomRight: CellPosition): Cell[][];
-
-    getAllCells(): Cell[][];
-
-    // For streaming api
-    // getCellsStream(topLeft, bottomRight, signal?): AsyncIterable<CellBatch>
+/** Cell located outside the table bounds */
+export type OutOfBoundsCell = BaseCell & {
+  type: "OutOfBounds"
 }
+
+/** Empty cell inside the table */
+export type EmptyCell = BaseContentCell & {
+  type: "Empty"
+}
+
+/** Table cell */
+export type Cell = HeaderCell | CornerCell | DataCell | OutOfBoundsCell | EmptyCell;
+
 
 //          col=0  col=1  col=2  col=3  col=4
 //         ┌──────┬──────┬──────┬──────┬──────┐

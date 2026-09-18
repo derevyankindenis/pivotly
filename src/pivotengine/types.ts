@@ -8,7 +8,6 @@ export type DataRow = Record<string, FieldValue>;
 export interface FieldObject {
   uniqueName: string;
 }
-
 export interface MeasureObject {
   uniqueName: string;
 }
