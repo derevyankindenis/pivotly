@@ -2,7 +2,7 @@ import type { FieldValue } from "../types";
 
 export class DimensionNode {
   readonly _children: Map<FieldValue, DimensionNode> = new Map();
-  private _leavesSize: number = 0;
+  private _leavesCount: number = 0;
 
   //TODO: return mutators (1. in return constructor 2. in callback 3. write to object from params)
   // create outside weakmap with mutamotrs WeakMap<node, mutators>
@@ -15,7 +15,7 @@ export class DimensionNode {
   }
 
   incrementLeaves() {
-    this._leavesSize++
+    this._leavesCount++
   }
 // #endregion
 
@@ -32,8 +32,8 @@ export class DimensionNode {
     return this.childrenSize === 0;
   }
 
-  get leavesSize() {
-    return this.isLeaf ? 1 : this._leavesSize;
+  get leavesCount() {
+    return this.isLeaf ? 1 : this._leavesCount;
   }
 
   get childrenSize() {
@@ -46,11 +46,11 @@ export class DimensionNode {
 
   traverse(cb: TraverseCallback, parentIndex: number = 0, index: number = 0, shift: number = 0) {
     let childIndex = 0;
-    let leavesSize = 0;
+    let leavesCount = 0;
 
     this._children.forEach(child => {
-      child.traverse(cb, index, childIndex, shift + leavesSize);
-      leavesSize += child.leavesSize;
+      child.traverse(cb, index, childIndex, shift + leavesCount);
+      leavesCount += child.leavesCount;
       childIndex++;
     })
 

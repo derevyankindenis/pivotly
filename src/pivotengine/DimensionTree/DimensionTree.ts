@@ -7,7 +7,7 @@ export type VisitedNode = {
   depth: number;
   parentIndex: number;
   childIndex: number;
-  leavesSize: number;
+  leavesCount: number;
 }
 
 export type VisitNodeCb = (node: VisitedNode) => void;
@@ -33,29 +33,8 @@ export class DimensionTree {
     return this._depth;
   }
 
-  get leavesSize() {
-    return this.root.leavesSize;
-  }
-
-  traverse(visitNodeCb: VisitNodeCb) {
-
-    const cb = (node: DimensionNode, parentIndex: number, childIndex: number, shift: number) => {
-      const depth = node.depth - 1;
-      if (depth === -1) return;
-
-      const visitedNode: VisitedNode = {
-        node,
-        shift,
-        depth,
-        leavesSize: node.leavesSize,
-        parentIndex,
-        childIndex
-      }
-
-      visitNodeCb(visitedNode);
-    }
-
-    this.root.traverse(cb);
+  get leavesCount() {
+    return this.root.leavesCount;
   }
 
   *bfs() {

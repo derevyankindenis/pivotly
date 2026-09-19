@@ -1,11 +1,9 @@
-import { describe, it, expect, beforeEach, afterEach, test } from 'vitest';
+import { describe, expect, test } from 'vitest';
 import { config as configPopulation1 } from "./fixtures/Population1";
-import { config as configPopulation2, result as result2 } from "./fixtures/Population2";
+import { config as configPopulation2 } from "./fixtures/Population2";
 import { config as configSales } from "./fixtures/Sales";
 import { config as configSales2 } from "./fixtures/Sales2";
-import { PivotModel } from '../src/pivotengine/PivotModel/PivotModel';
-import Table from "cli-table3"
-import { denseMatrixToCliTable } from "./cliview";
+import { Pivotly } from '../src/Pivotly';
 
 import fs from 'fs/promises';
 import { Config } from '../src/pivotengine/types';
@@ -21,29 +19,13 @@ const writeSparse = async (config: Config) => {
 }
 
 const createTableDense = (config: Config) => {
-    const model = new PivotModel(config);
-    const cellsGen = model.denseRows();
-    const table = new Table({ style: { head: [], border: [] } });
-
-    for (const row of cellsGen) {
-        const rows = row.map(cell => {
-            if (cell.type === "Empty" || cell.type === "OutOfBounds") {
-                return { content: "-" }
-            } else {
-                return { content: cell.content }
-            }
-        })
-        table.push(rows)
-    }
-
-    return table.toString().trim();
+    const pivotly = new Pivotly(config);
+    return pivotly.toString('tabular');
 }
 
 const createTableSparse = (config: Config) => {
-    const model = new PivotModel(config);
-    const cellsGen = model.denseRows();
-    const resultTable = denseMatrixToCliTable(cellsGen)
-    return resultTable;
+    const pivotly = new Pivotly(config);
+    return pivotly.toString('flat');
 }
 
 describe('Write file', () => {
