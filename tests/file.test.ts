@@ -6,16 +6,27 @@ import { config as configSales2 } from "./fixtures/Sales2";
 import { Pivotly } from '../src/Pivotly';
 
 import fs from 'fs/promises';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { Config } from '../src/pivotengine/types';
+
+/** This is not an assertion, just a helper output for quick manual debugging of the render:
+ each test overwrites the same file with the rendered table
+ so it can be visually inspected in the editor. */
+
+const debugDir = path.join(path.dirname(fileURLToPath(import.meta.url)), '__debug__');
+const debugFilePath = path.join(debugDir, 'result.txt');
 
 const writeDense = async (config: Config) => {
     const resultTable = createTableDense(config);
-    await fs.writeFile('./result.txt', resultTable);
+    await fs.mkdir(debugDir, { recursive: true });
+    await fs.writeFile(debugFilePath, resultTable);
 }
 
 const writeSparse = async (config: Config) => {
     const resultTable = createTableSparse(config);
-    await fs.writeFile('./result.txt', resultTable);
+    await fs.mkdir(debugDir, { recursive: true });
+    await fs.writeFile(debugFilePath, resultTable);
 }
 
 const createTableDense = (config: Config) => {
