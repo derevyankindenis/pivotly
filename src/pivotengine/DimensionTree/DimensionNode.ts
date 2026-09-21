@@ -9,7 +9,7 @@ export class DimensionNode {
   constructor(readonly key: string, readonly value: FieldValue, readonly depth: number, readonly parent: DimensionNode | null = null) {
   }
 
-// #region Mutators
+  // #region Mutators
   addChild(node: DimensionNode) {
     this._children.set(node.value, node);
   }
@@ -17,7 +17,7 @@ export class DimensionNode {
   incrementLeaves() {
     this._leavesCount++
   }
-// #endregion
+  // #endregion
 
 
   hasChild(value: FieldValue) {
@@ -43,19 +43,4 @@ export class DimensionNode {
   get children() {
     return this._children.values()
   }
-
-  traverse(cb: TraverseCallback, parentIndex: number = 0, index: number = 0, shift: number = 0) {
-    let childIndex = 0;
-    let leavesCount = 0;
-
-    this._children.forEach(child => {
-      child.traverse(cb, index, childIndex, shift + leavesCount);
-      leavesCount += child.leavesCount;
-      childIndex++;
-    })
-
-    cb(this, parentIndex, index, shift);
-  }
 }
-
-type TraverseCallback = (node: DimensionNode, parentIndex: number, index: number, shift: number) => void;

@@ -1,1 +1,1 @@
-console.log("hello");
+export { Pivotly } from "./Pivotly"

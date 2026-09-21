@@ -1,19 +1,6 @@
 import type { DataRow, FieldObject } from '../types';
 import { DimensionNode } from './DimensionNode';
 
-export type VisitedNode = {
-  node: DimensionNode;
-  shift: number;
-  depth: number;
-  parentIndex: number;
-  childIndex: number;
-  leavesCount: number;
-}
-
-export type VisitNodeCb = (node: VisitedNode) => void;
-
-export type VisitDfs = { node: DimensionNode; childIndex: number }
-
 export class DimensionTree {
   private readonly root = new DimensionNode("root", "root", 0);
   private _depth = 0;
@@ -81,5 +68,5 @@ export class DimensionTree {
 
   private get shortId() {
     return Math.random().toString(36).substring(2, 2 + 9);
-}
+  }
 }
